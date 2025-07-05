@@ -1,0 +1,31 @@
+name: Submit PySpark Job to Dataproc
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  submit-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: dataprocproject-460907
+
+      - name: Submit Dataproc PySpark Job
+        run: |
+          gcloud dataproc jobs submit pyspark gs://dataprocproject-460907-spark-jobs/scripts/transform_transactions.py \
+            --cluster=demo-dataproc-cluster \
+            --region=us-central1 \
+            --jars=gs://spark-lib/bigquery/spark-bigquery-latest_2.12.jar
