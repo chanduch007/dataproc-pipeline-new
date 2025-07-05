@@ -4,7 +4,10 @@ from pyspark.sql.functions import col, to_date
 # Initialize SparkSession
 spark = SparkSession.builder \
     .appName("Transform Transactions") \
+    .config("spark.executor.memory", "1g") \
+    .config("spark.driver.memory", "1g") \
     .getOrCreate()
+
 
 # Path to GCS CSV file
 gcs_input_path = "gs://dataprocproject-460907-raw-data/input/transactions.csv"
