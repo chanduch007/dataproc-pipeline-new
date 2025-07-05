@@ -24,7 +24,7 @@ df_transformed = df.withColumn("amount", col("amount").cast("double")) \
 df_transformed.write \
     .format("bigquery") \
     .option("table", "dataprocproject-460907.banking.transaction_summary") \
-    .option("temporaryGcsBucket", "dataprocproject-460907-temp-bq") \
+    .option("temporaryGcsBucket", "dataprocproject-460907-dataproc-temp") \
     .mode("overwrite") \
     .save()
 
