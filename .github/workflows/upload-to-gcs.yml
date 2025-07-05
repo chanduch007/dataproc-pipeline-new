@@ -1,0 +1,30 @@
+name: Upload PySpark Scripts to GCS
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'spark_jobs/**/*.py'
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: dataprocproject-460907
+
+      - name: Upload PySpark scripts to GCS
+        run: |
+          gsutil -m cp spark_jobs/*.py gs://dataprocproject-460907-spark-jobs/scripts/
